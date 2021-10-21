@@ -14,6 +14,10 @@ For authentication, ```x-api-key``` should be added into every http request head
 
 If ```x-api-key``` is not present or expired, then it will return 406 Error.
 
+## API Subscription
+
+Please contact us to subscribe our API.
+
 ## Hosts
 
 - api.cryptowatchtower.io (live server)
