@@ -1,10 +1,16 @@
-# CRYPTOWATCHTOWER.IO API Description
+# CRYPTOWATCHTOWER.IO API Guides
 
-## Basic flow
+## Introduction
 
-You can use our API to detect scam / rug pulls with token name or address.
+Cryptowatchtower API provides Scam / Rug Pull scanning features for 3rd party platforms.
 
-For authentication, ```x-api-key``` should be added into http request headers, with the value we provide.
+It includes the following functional end points:
+
+- Individual token scanning
+
+- Get all risky tokens list (blacklist of tokens)
+
+For authentication, ```x-api-key``` should be added into every http request headers, with the value we provide.
 
 If ```x-api-key``` is not present or expired, then it will return 406 Error.
 
@@ -14,17 +20,43 @@ If ```x-api-key``` is not present or expired, then it will return 406 Error.
 
 - api-staging.cryptowatchtower.io (staging server)
 
-## Endpoints
+## Fields description
 
-- /api/v1/external/request/{token symbol or address} ```[POST]```
+- riskRating
 
-It accepts requests and returns results about tokens.
+type: number, range: 0 ~ 10
 
-If it is expired or not registered in our database, then it re-scans the token, and return the progress while in the middle of scanning.
+It indicates risk rating about the token.
+
+The higher score, the more safe.
+
+7 ~ 10 : Low Risk
+
+4 ~ 6 : Medium Risk
+
+0 ~ 3 : High Risk
+
+- unLaunched, boolean
+
+It indicates whether the token is launched or in the pre-sale period.
+
+- scannedAt, number
+
+It indicates timestamp when it was scanned at last.
+
+
+
+# Endpoints
+
+## /api/v1/external/request/{individual token symbol or address} ```[POST]```
+
+It accepts scanning request of a token and returns result.
+
+If the token was scanned recently and keeps latest, then it will return final results directly, with 'completed' state.
+
+If the token data is not registered in our database or expired, then it re-scans the token, and returns the progress while in the middle of scanning.
 
 So you should invoke this endpoint regularly(in every 3~4 seconds), in order to get the final result.
-
-If the token was scanned recently, then it will return final results directly, with 'completed' state.
 
 If token symbol or address is invalid, then it will reject with 404 Error.
 
@@ -67,26 +99,46 @@ Response:
 }
 ```
 
-## Field description
+## /api/v1/external/blacklists  ```[GET]```
 
-- riskRating
+It returns all risky tokens list with pagination.
 
-type: number, range: 0 ~ 10
+query parameters: 
 
-It indicates risk rating about the token.
+- network: bsc / ethereum, default bsc
+- page: starts from 1, default 1
+- perPage: <2000, default 1000
 
-The higher score, the more safe.
+Example:
 
-7 ~ 10 : Low Risk
+/api/v1/external/blacklists?page=7&perPage=2000&network=ethereum
 
-4 ~ 6 : Medium Risk
 
-0 ~ 3 : High Risk
+Response: 
 
-- unLaunched, boolean
+```
+{
+  "network": "bsc",
+  "counts": 17852,
+  "perPage": 1000,
+  "pages": 18,
+  "page": 1,
+  "results": [
+    {
+      "address": "0xfc0c4bb5abeef7f5fa7abdbdcbf997e682ff0394",
+      "riskRating": 0
+    },
+    {
+      "address": "0xfed8f06d6cdf7a0f1f917838fb5c263eda61e82a",
+      "riskRating": 1
+    },
 
-It indicates whether the token is launched or in the pre-sale period.
-
-- scannedAt, number
-
-It indicates timestamp when it was scanned at last.
+    ...
+    
+    {
+      "address": "0x57264840205f613fa47cce12d61651657accf925",
+      "riskRating": 1
+    }
+  ]
+}
+```
