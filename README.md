@@ -48,7 +48,11 @@ It indicates whether the token is launched or in the pre-sale period.
 
 It indicates timestamp when it was scanned at last.
 
+- honeypot, boolean
 
+It indicates whether the token is honeypot or not.
+
+(At the moment, it is only working for BSC tokens.)
 
 # Endpoints
 
@@ -140,8 +144,9 @@ Response:
     ...
     
     {
-      "address": "0x57264840205f613fa47cce12d61651657accf925",
-      "riskRating": 1
+      "address": "0x78dc45096e1de6f745d0e5b33b64b43388839afb",
+      "riskRating": 1,
+      "honeypot": true
     }
   ]
 }
