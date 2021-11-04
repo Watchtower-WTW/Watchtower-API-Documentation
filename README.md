@@ -151,3 +151,8 @@ Response:
   ]
 }
 ```
+
+
+## /api/v1/external/scams ```[GET]```
+
+It returns all scams address list.
