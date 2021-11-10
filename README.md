@@ -10,6 +10,8 @@ It includes the following functional end points:
 
 - Get all risky tokens list (blacklist of tokens)
 
+- Get all scam/rug-pulls list
+
 For authentication, ```x-api-key``` should be added into every http request headers, with the value we provide.
 
 If ```x-api-key``` is not present or expired, then it will return 406 Error.
@@ -53,6 +55,10 @@ It indicates timestamp when it was scanned at last.
 It indicates whether the token is honeypot or not.
 
 (At the moment, it is only working for BSC tokens.)
+
+- isScammer, boolean
+
+It indicates whether the token is verified scam/rug-pull or not.
 
 # Endpoints
 
@@ -102,7 +108,8 @@ Response:
     "decimals": 9,
     "riskRating": 8,
     "scannedAt": 1634712192228,
-    "unLaunched": false
+    "unLaunched": false,
+    "isScammer": false
   }
 }
 ```
