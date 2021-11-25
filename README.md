@@ -50,11 +50,13 @@ It indicates whether the token is launched or in the pre-sale period.
 
 It indicates timestamp when it was scanned at last.
 
-- honeypot, boolean
+- honeypot, enum ["OK", "UNKNOWN", "NO_PAIRS", "SEVERE_FEE", "HIGH_FEE", "MEDIUM_FEE", "APPROVE_FAILED", "SWAP_FAILED"]
 
 It indicates whether the token is honeypot or not.
 
 (At the moment, it is only working for BSC tokens.)
+
+If the result is one of these values ```UNKNOWN / NO_PAIRS / SWAP_FAILED / APPROVE_FAILED```, then it means honeypot.
 
 - isScammer, boolean
 
@@ -109,7 +111,8 @@ Response:
     "riskRating": 8,
     "scannedAt": 1634712192228,
     "unLaunched": false,
-    "isScammer": false
+    "isScammer": false,
+    "honeypot": "OK"
   }
 }
 ```
